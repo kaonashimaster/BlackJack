@@ -198,6 +198,116 @@ class Player:
     def get_num_player_cards(self):
         return len(self.player_hand.cards)
 
+    # プレイヤー手札情報をまとめて取得
+    # 戻り値: (score, n_cards, soft_hand_flag)
+    def get_hand_info(self):
+        score = self.player_hand.get_score()
+        n_cards = len(self.player_hand.cards)
+        # ソフトハンド判定: エースが11としてカウントされているか
+        have_ace = False
+        others = 0
+        for i in self.player_hand.cards:
+            j = min(10, (i % 13) + 1)
+            if j == 1:
+                have_ace = True
+            else:
+                others += j
+        soft_hand = False
+        if have_ace and others + 11 <= 21:
+            soft_hand = True
+        return score, n_cards, soft_hand
+
+    # ディーラーの見えているカード情報（スコア）を取得
+    def get_dealer_card_info(self):
+        if len(self.dealer_hand.cards) == 0:
+            return 0
+        # 通常はディーラーの見えている1枚目のみを対象にするが、ここでは現在の合計を返す
+        return self.dealer_hand.get_score()
+
+    # 文字列リストから手札をセットする (例: ['Spade-A','Heart-10'] または ['12','5'])
+    def set_hand_by_str(self, str_list):
+        self.player_hand.clear()
+        for s in str_list:
+            s = s.strip()
+            if s == '':
+                continue
+            # もし数値文字列ならそのまま int として扱う
+            try:
+                cid = int(s)
+                self.player_hand.append(cid)
+                continue
+            except:
+                pass
+            # 形式 "Suit-Num" を想定して逆変換
+            try:
+                parts = s.split('-')
+                if len(parts) == 2:
+                    suit_str, num_str = parts[0], parts[1]
+                    suit_str = suit_str.strip()
+                    num_str = num_str.strip()
+                    if num_str == 'A':
+                        num = 1
+                    elif num_str == 'J':
+                        num = 11
+                    elif num_str == 'Q':
+                        num = 12
+                    elif num_str == 'K':
+                        num = 13
+                    else:
+                        num = int(num_str)
+                    if suit_str.startswith('Sp') or suit_str.lower().startswith('spade'):
+                        suit = 0
+                    elif suit_str.startswith('Cl') or suit_str.lower().startswith('club'):
+                        suit = 1
+                    elif suit_str.startswith('Di') or suit_str.lower().startswith('diamond'):
+                        suit = 2
+                    else:
+                        suit = 3
+                    cid = suit * 13 + (num - 1)
+                    self.player_hand.append(cid)
+            except Exception:
+                # パースできない文字列は無視
+                continue
+
+    # ディーラーの見えているカードを文字列から設定
+    def set_dealer_card(self, s: str):
+        self.dealer_hand.clear()
+        if s is None or s == 'X' or s == '':
+            return
+        s = s.strip()
+        try:
+            cid = int(s)
+            self.dealer_hand.append(cid)
+            return
+        except:
+            pass
+        try:
+            parts = s.split('-')
+            if len(parts) == 2:
+                suit_str, num_str = parts[0], parts[1]
+                if num_str == 'A':
+                    num = 1
+                elif num_str == 'J':
+                    num = 11
+                elif num_str == 'Q':
+                    num = 12
+                elif num_str == 'K':
+                    num = 13
+                else:
+                    num = int(num_str)
+                if suit_str.startswith('Sp') or suit_str.lower().startswith('spade'):
+                    suit = 0
+                elif suit_str.startswith('Cl') or suit_str.lower().startswith('club'):
+                    suit = 1
+                elif suit_str.startswith('Di') or suit_str.lower().startswith('diamond'):
+                    suit = 2
+                else:
+                    suit = 3
+                cid = suit * 13 + (num - 1)
+                self.dealer_hand.append(cid)
+        except Exception:
+            return
+
     # ベットの設定
     def set_bet(self):
         self.current_bet = self.basic_bet
