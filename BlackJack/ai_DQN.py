@@ -378,7 +378,7 @@ def main():
     if args.load != '':
         q_net.load_state_dict(torch.load(args.load))
         
-    # 【ここが復活しました！】テストモードなら推論に切り替え（エラー回避）
+    # テストモードなら推論に切り替え（エラー回避）
     if args.testmode:
         q_net.eval()
 
