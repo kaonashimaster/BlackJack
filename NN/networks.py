@@ -10,43 +10,40 @@ from mylib.basic_layers import *
 # ニューラルネットワークのサンプル
 # MLP (Multi-Layer Perceptron) と呼ばれるもの
 class SampleMLP(nn.Module):
-
     def __init__(self):
         super(SampleMLP, self).__init__()
 
-        ### 1層目 ###
-
-        # 全結合層1: 2次元入力 → 10パーセプトロン
-        self.fc1 = nn.Linear(in_features=2, out_features=10)
-        # バッチ正規化層1
-        self.bn1 = nn.BatchNorm1d(num_features=10) # 前の全結合層の出力パーセプトロン数が10なので
-        # 活性化関数1: ReLU
+        # --- 1層目 ---
+        self.fc1 = nn.Linear(in_features=4, out_features=50)  # パーセプトロン数を10から20に増やす
+        self.bn1 = nn.BatchNorm1d(num_features=50)
         self.act1 = nn.ReLU()
 
-        ### 2層目 ###
+        # --- 2層目 ---
+        self.fc2 = nn.Linear(in_features=50, out_features=100) # パーセプトロン数を10から50に増やす
+        self.drop2 = nn.Dropout(p=0.3) # ドロップアウトを追加 (ドロップ率を0.3に調整)
+        self.act2 = nn.ReLU()
 
-        # 全結合層2: 10パーセプトロン → 10パーセプトロン
-        self.fc2 = nn.Linear(in_features=10, out_features=10)
-        # ドロップアウト層2
-        self.drop2 = nn.Dropout(p=0.5) # ドロップアウト率 0.5
-        # 活性化関数2: Tanh
-        self.act2 = nn.Tanh()
+        # --- 3層目 (新しい層) ---
+        self.fc3 = nn.Linear(in_features=100, out_features=50)
+        self.drop3 = nn.Dropout(p=0.3) # こちらにもドロップアウトを追加
+        self.act3 = nn.ReLU()
 
-        ### 3層目 ###
-
-        # 全結合層3: 10パーセプトロン → 3クラス出力
-        self.fc3 = nn.Linear(in_features=10, out_features=3)
+        # --- 4層目 (出力層) ---
+        self.fc4 = nn.Linear(in_features=50, out_features=1)
 
     def forward(self, x):
-        h = self.fc1(x)   # 全結合層1にデータを入力
-        h = self.bn1(h)   # 続いてバッチ正規化層1に通す
-        h = self.act1(h)  # 続いて活性化関数1に通す
-        h = self.fc2(h)   # 続いて全結合層2に通す
-        h = self.drop2(h) # 続いてドロップアウト2に通す
-        h = self.act2(h)  # 続いて活性化関数2に通す
-        y = self.fc3(h)   # 最後に全結合層4に通す
-        return y
+        # 1層目の処理
+        h = self.act1(self.bn1(self.fc1(x)))
+        
+        # 2層目の処理
+        h = self.act2(self.drop2(self.fc2(h)))
 
+        # 3層目の処理  
+        h = self.act3(self.drop3(self.fc3(h)))
+        
+        # 4層目の処理
+        y = self.fc4(h)
+        return y
 
 # SampleMLP と同じニューラルネットワークを basic_layers.py に記載の自作モジュールで作成したもの
 class myMLP(nn.Module):
@@ -55,13 +52,13 @@ class myMLP(nn.Module):
         super(myMLP, self).__init__()
 
         # 1層目: 2次元入力 → 10パーセプトロン（バッチ正規化あり, ドロップアウトなし, 活性化関数 ReLU）
-        self.layer1 = FC(in_features=2, out_features=10, do_bn=True, activation='relu')
+        self.layer1 = FC(in_features=4, out_features=10, do_bn=True, activation='relu')
 
         # 2層目: 10パーセプトロン → 10パーセプトロン（バッチ正規化なし, ドロップアウトあり（ドロップアウト率 0.5）, 活性化関数 Tanh）
         self.layer2 = FC(in_features=10, out_features=10, do_bn=False, dropout_ratio=0.5, activation='tanh')
 
         # 3層目: 10パーセプトロン → 3クラス出力（バッチ正規化なし, ドロップアウトなし, 活性化関数なし）
-        self.layer3 = FC(in_features=10, out_features=3, do_bn=False, activation='none')
+        self.layer3 = FC(in_features=10, out_features=1, do_bn=False, activation='none')
 
     def forward(self, x):
         h = self.layer1(x) # 1層目にデータを入力

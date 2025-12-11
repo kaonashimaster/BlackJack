@@ -2,255 +2,376 @@ import copy
 import socket
 import argparse
 import numpy as np
-import pickle
-import os
+from classes import Action, Strategy, QTable, Player, get_card_info, get_action_name
+from config import PORT, BET, INITIAL_MONEY, N_DECKS
 
-# 相対インポート (python -m BlackJack.ai_player_Q で実行する場合)
-from .classes import Action, Strategy, QTable, Player, get_card_info, get_action_name
-from .config import PORT, BET, INITIAL_MONEY, N_DECKS
 
 # 1ゲームあたりのRETRY回数の上限
 RETRY_MAX = 10
 
+
 ### グローバル変数 ###
+
+# ゲームごとのRETRY回数のカウンター
 g_retry_counter = 0
+
+# プレイヤークラスのインスタンスを作成
 player = Player(initial_money=INITIAL_MONEY, basic_bet=BET)
+
+# ディーラーとの通信用ソケット
 soc = None
+
+# Q学習用のQテーブル
 q_table = QTable(action_class=Action, default_value=0)
 
 # Q学習の設定値
-# 学習時はこの設定で動く
-LEARNING_RATE = 0.1
-DISCOUNT_FACTOR = 0.95
-EPS_START = 1.0
-EPS_END = 0.00  # 本番では0にするため
-EPS_DECAY_GAMES = 40000 # 5万回のうち4万回かけてじっくりランダムを減らす
+EPS = 0.3 # ε-greedyにおけるε
+LEARNING_RATE = 0.1 # 学習率
+DISCOUNT_FACTOR = 0.9 # 割引率
+
 
 ### 関数 ###
 
+# ゲームを開始する
 def game_start(game_ID=0):
     global g_retry_counter, player, soc
+
+    print('Game {0} start.'.format(game_ID))
+    print('  money: ', player.get_money(), '$')
+
+    # RETRY回数カウンターの初期化
     g_retry_counter = 0
-    bet, money = player.set_bet()
-    # メッセージ送信はしない（プロトコル合わせ）
 
-def get_current_hands():
-    return copy.deepcopy(player.player_hand), copy.deepcopy(player.dealer_hand)
-
-# Act関数：行動を送信し、結果を受信し、報酬を計算する
-def act(action):
-    global player, soc, g_retry_counter
-
-    # 1. コマンド送信
-    if action == Action.HIT: cmd = 'hit'
-    elif action == Action.STAND: cmd = 'stand'
-    elif action == Action.DOUBLE_DOWN: cmd = 'double_down'
-    elif action == Action.SURRENDER: cmd = 'surrender'
-    elif action == Action.RETRY: cmd = 'retry'
-    else: cmd = 'stand'
-    
-    player.send_message(soc, cmd)
-
-    # 2. 結果受信
-    try:
-        if action == Action.HIT or action == Action.DOUBLE_DOWN:
-            pc, score, status, rate, dc = player.receive_message(dsoc=soc, get_player_card=True, get_dealer_cards=True)
-        elif action == Action.RETRY:
-            pc, score, status, rate, dc = player.receive_message(dsoc=soc, get_player_card=True, get_dealer_cards=True, retry_mode=True)
-            g_retry_counter += 1
-        elif action == Action.STAND or action == Action.SURRENDER:
-            score, status, rate, dc = player.receive_message(dsoc=soc, get_dealer_cards=True)
-        else:
-            return 0.0, True, 'error', 0.0
-    except Exception as e:
-        return 0.0, True, 'error', 0.0
-
-    # 3. 学習用報酬の計算（ここが必勝のキモ）
-    learning_reward = 0.0
-    
-    # 基本の勝ち負け
-    if status == 'win' or status == 'dealer_bust':
-        learning_reward = 1.0
-    elif status == 'lose':
-        learning_reward = -1.0
-    elif status == 'bust':
-        learning_reward = -5.0  # ★バーストは死罪（絶対に避けるように学習させる）
-    elif status == 'push' or status == 'draw':
-        learning_reward = 0.0
-    elif status == 'surrendered':
-        learning_reward = -0.5
-    
-    # RETRYのコスト（少しだけ嫌がらせるが、バースト(-5.0)よりはマシと思わせる）
-    if action == Action.RETRY:
-        learning_reward -= 0.1
-
-    # 実際の獲得金額
-    final_reward = 0.0
-    done = (status != 'unsettled')
-    if done:
-        final_reward = player.update_money(rate=rate)
-
-    return final_reward, done, status, learning_reward
-
-# ★重要：状態の定義を「ガチ勢」仕様に変更
-def get_state():
-    # 1. 自分の点数
-    score = player.player_hand.get_score()
-    
-    # 2. ディーラーのカード（見えている1枚）
-    if len(player.dealer_hand.cards) > 0:
-        d_card = player.dealer_hand.cards[0]
-        d_score = min(10, (d_card % 13) + 1)
-    else:
-        d_score = 0
-        
-    # 3. ソフトハンドかどうか（Aを11として持っているか）
-    # これがないと「A-6(17)」と「10-7(17)」を区別できず負ける
-    has_usable_ace = False
-    hand_val = 0
-    has_ace = False
-    for c in player.player_hand.cards:
-        rank = (c % 13) + 1
-        if rank == 1: has_ace = True
-        hand_val += min(10, rank)
-    
-    # 「Aを持っていて」かつ「Aを11とみなしてもバーストしない」ならソフトハンド
-    if has_ace and (hand_val + 10 <= 21):
-        has_usable_ace = True
-
-    # 状態をタプルで返す（Qテーブルのキーになる）
-    return (score, d_score, has_usable_ace)
-
-# 行動選択（イプシロン・グリーディ）
-def select_action(state, epsilon):
-    # RETRY回数上限ならRETRY以外の行動から選ぶ
-    available_actions = [Action.HIT, Action.STAND, Action.DOUBLE_DOWN, Action.SURRENDER, Action.RETRY]
-    if g_retry_counter >= RETRY_MAX:
-        available_actions.remove(Action.RETRY)
-
-    if np.random.rand() < epsilon:
-        return np.random.choice(available_actions)
-    else:
-        # Q値が最大の行動を選ぶ
-        return q_table.get_best_action(state, available_actions=available_actions)
-
-### QTableクラスの拡張（特定の選択肢から選べるように） ###
-# classes.py をいじりたくないので、簡易的にここでオーバーライド的な処理
-def get_best_action_custom(q_table_obj, state, available_actions):
-    best_actions = []
-    best_value = -float('inf')
-    
-    for a in available_actions:
-        q = q_table_obj.get_Q_value(state, a)
-        if q > best_value:
-            best_value = q
-            best_actions = [a]
-        elif q == best_value:
-            best_actions.append(a)
-    
-    if not best_actions:
-        return np.random.choice(available_actions)
-    return np.random.choice(best_actions)
-
-# QTableにメソッドを追加（モンキーパッチ）
-QTable.get_best_action = get_best_action_custom
-
-
-### メイン処理 ###
-def main():
-    global g_retry_counter, player, soc, q_table
-
-    parser = argparse.ArgumentParser(description='Q-Learning AI Player')
-    parser.add_argument('--games', type=int, default=1000, help='number of games')
-    parser.add_argument('--load', type=str, default='', help='load Q-table from file')
-    parser.add_argument('--save', type=str, default='', help='save Q-table to file')
-    parser.add_argument('--train', action='store_true', help='training mode (high epsilon)')
-    args = parser.parse_args()
-
-    n_games = args.games
-    
-    # Qテーブル読み込み
-    if args.load != '' and os.path.exists(args.load):
-        q_table.load(args.load)
-        print(f"Q-table loaded from {args.load}")
-
-    # ソケット接続
+    # ディーラープログラムに接続する
     soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     soc.connect((socket.gethostname(), PORT))
     soc.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-    total_wins = 0
-    initial_money = player.get_money()
+    # ベット
+    bet, money = player.set_bet()
+    print('Action: BET')
+    print('  money: ', money, '$')
+    print('  bet: ', bet, '$')
 
-    for n in range(1, n_games + 1):
-        game_start(n)
-        
-        # 1. シャッフル通知・初期カード受信
-        shuffled = player.receive_card_shuffle_status(soc)
-        player.receive_init_cards(soc)
-        
-        # 現在の状態取得
-        state = get_state()
-        
-        # 学習率とランダム率の決定
-        if args.train:
-            # 学習モード：徐々にランダムを減らす
-            epsilon = max(EPS_END, EPS_START - (EPS_START - EPS_END) * (n / EPS_DECAY_GAMES))
-            lr = LEARNING_RATE
-        else:
-            # 本番モード：ランダムなし（ガチ）
-            epsilon = 0.0
-            lr = 0.0 # 学習もしない
+    # ディーラーから「カードシャッフルを行ったか否か」の情報を取得
+    # シャッフルが行われた場合は True が, 行われなかった場合は False が，変数 cardset_shuffled にセットされる
+    # なお，本サンプルコードではここで取得した情報は使用していない
+    cardset_shuffled = player.receive_card_shuffle_status(soc)
+    if cardset_shuffled:
+        print('Dealer said: Card set has been shuffled before this game.')
 
-        while True:
-            # 行動選択
-            action = select_action(state, epsilon)
-            
-            # 行動実行
-            reward, done, status, learning_reward = act(action)
-            
-            # 次の状態
-            next_state = get_state()
-            
-            # Q値更新（学習モードのみ）
-            if args.train:
-                current_q = q_table.get_Q_value(state, action)
-                # 次の状態での最大Q値
-                max_next_q = 0
-                if not done:
-                    # 次もゲームが続くなら、その先の最大Q値を考慮
-                    # RETRY上限ならRETRYを除外して最大値を探す
-                    avail = [Action.HIT, Action.STAND, Action.DOUBLE_DOWN, Action.SURRENDER, Action.RETRY]
-                    if g_retry_counter >= RETRY_MAX: avail.remove(Action.RETRY)
-                    
-                    # 簡易的に全アクションから最大を取得（厳密には上記availから）
-                    vals = [q_table.get_Q_value(next_state, a) for a in avail]
-                    max_next_q = max(vals) if vals else 0
-                
-                # Q学習の式
-                new_q = current_q + lr * (learning_reward + DISCOUNT_FACTOR * max_next_q - current_q)
-                q_table.set_Q_value(state, action, new_q)
+    # ディーラーから初期カード情報を受信
+    dc, pc1, pc2 = player.receive_init_cards(soc)
+    print('Delaer gave cards.')
+    print('  dealer-card: ', get_card_info(dc))
+    print('  player-card 1: ', get_card_info(pc1))
+    print('  player-card 2: ', get_card_info(pc2))
+    print('  current score: ', player.get_score())
 
-            state = next_state
-            
-            if done:
-                if status == 'win': total_wins += 1
-                break
-        
-        # 途中経過
-        if n % 1000 == 0:
-            print(f"Game {n}: WinRate={total_wins/n*100:.2f}%, Money={player.get_money()}")
+# 現時点での手札情報（ディーラー手札は見えているもののみ）を取得
+def get_current_hands():
+    return copy.deepcopy(player.player_hand), copy.deepcopy(player.dealer_hand)
 
-    # 終了処理
-    print(f"\nFinal Money: {player.get_money()} (Profit: {player.get_money() - initial_money})")
-    print(f"Final Win Rate: {total_wins/n_games*100:.2f}%")
-    
+# HITを実行する
+def hit():
+    global player, soc
+
+    print('Action: HIT')
+
+    # ディーラーにメッセージを送信
+    player.send_message(soc, 'hit')
+
+    # ディーラーから情報を受信
+    pc, score, status, rate, dc = player.receive_message(dsoc=soc, get_player_card=True, get_dealer_cards=True)
+    print('  player-card {0}: '.format(player.get_num_player_cards()), get_card_info(pc))
+    print('  current score: ', score)
+
+    # バーストした場合はゲーム終了
+    if status == 'bust':
+        for i in range(len(dc)):
+            print('  dealer-card {0}: '.format(i+2), get_card_info(dc[i]))
+        print("  dealer's score: ", player.get_dealer_score())
+        soc.close() # ディーラーとの通信をカット
+        reward = player.update_money(rate=rate) # 所持金額を更新
+        print('Game finished.')
+        print('  result: bust')
+        print('  money: ', player.get_money(), '$')
+        return reward, True, status
+
+    # バーストしなかった場合は続行
+    else:
+        return 0, False, status
+
+# STANDを実行する
+def stand():
+    global player, soc
+
+    print('Action: STAND')
+
+    # ディーラーにメッセージを送信
+    player.send_message(soc, 'stand')
+
+    # ディーラーから情報を受信
+    score, status, rate, dc = player.receive_message(dsoc=soc, get_dealer_cards=True)
+    print('  current score: ', score)
+    for i in range(len(dc)):
+        print('  dealer-card {0}: '.format(i+2), get_card_info(dc[i]))
+    print("  dealer's score: ", player.get_dealer_score())
+
+    # ゲーム終了，ディーラーとの通信をカット
     soc.close()
 
-    # Qテーブル保存
+    # 所持金額を更新
+    reward = player.update_money(rate=rate)
+    print('Game finished.')
+    print('  result: ', status)
+    print('  money: ', player.get_money(), '$')
+    return reward, True, status
+
+# DOUBLE_DOWNを実行する
+def double_down():
+    global player, soc
+
+    print('Action: DOUBLE DOWN')
+
+    # 今回のみベットを倍にする
+    bet, money = player.double_bet()
+    print('  money: ', money, '$')
+    print('  bet: ', bet, '$')
+
+    # ディーラーにメッセージを送信
+    player.send_message(soc, 'double_down')
+
+    # ディーラーから情報を受信
+    pc, score, status, rate, dc = player.receive_message(dsoc=soc, get_player_card=True, get_dealer_cards=True)
+    print('  player-card {0}: '.format(player.get_num_player_cards()), get_card_info(pc))
+    print('  current score: ', score)
+    for i in range(len(dc)):
+        print('  dealer-card {0}: '.format(i+2), get_card_info(dc[i]))
+    print("  dealer's score: ", player.get_dealer_score())
+
+    # ゲーム終了，ディーラーとの通信をカット
+    soc.close()
+
+    # 所持金額を更新
+    reward = player.update_money(rate=rate)
+    print('Game finished.')
+    print('  result: ', status)
+    print('  money: ', player.get_money(), '$')
+    return reward, True, status
+
+# SURRENDERを実行する
+def surrender():
+    global player, soc
+
+    print('Action: SURRENDER')
+
+    # ディーラーにメッセージを送信
+    player.send_message(soc, 'surrender')
+
+    # ディーラーから情報を受信
+    score, status, rate, dc = player.receive_message(dsoc=soc, get_dealer_cards=True)
+    print('  current score: ', score)
+    for i in range(len(dc)):
+        print('  dealer-card {0}: '.format(i+2), get_card_info(dc[i]))
+    print("  dealer's score: ", player.get_dealer_score())
+
+    # ゲーム終了，ディーラーとの通信をカット
+    soc.close()
+
+    # 所持金額を更新
+    reward = player.update_money(rate=rate)
+    print('Game finished.')
+    print('  result: ', status)
+    print('  money: ', player.get_money(), '$')
+    return reward, True, status
+
+# RETRYを実行する
+def retry():
+    global player, soc
+
+    print('Action: RETRY')
+
+    # ベット額の 1/4 を消費
+    penalty = player.current_bet // 4
+    player.consume_money(penalty)
+    print('  player-card {0} has been removed.'.format(player.get_num_player_cards()))
+    print('  money: ', player.get_money(), '$')
+
+    # ディーラーにメッセージを送信
+    player.send_message(soc, 'retry')
+
+    # ディーラーから情報を受信
+    pc, score, status, rate, dc = player.receive_message(dsoc=soc, get_player_card=True, get_dealer_cards=True, retry_mode=True)
+    print('  player-card {0}: '.format(player.get_num_player_cards()), get_card_info(pc))
+    print('  current score: ', score)
+
+    # バーストした場合はゲーム終了
+    if status == 'bust':
+        for i in range(len(dc)):
+            print('  dealer-card {0}: '.format(i+2), get_card_info(dc[i]))
+        print("  dealer's score: ", player.get_dealer_score())
+        soc.close() # ディーラーとの通信をカット
+        reward = player.update_money(rate=rate) # 所持金額を更新
+        print('Game finished.')
+        print('  result: bust')
+        print('  money: ', player.get_money(), '$')
+        return reward-penalty, True, status
+
+    # バーストしなかった場合は続行
+    else:
+        return -penalty, False, status
+
+# 行動の実行
+def act(action: Action):
+    if action == Action.HIT:
+        return hit()
+    elif action == Action.STAND:
+        return stand()
+    elif action == Action.DOUBLE_DOWN:
+        return double_down()
+    elif action == Action.SURRENDER:
+        return surrender()
+    elif action == Action.RETRY:
+        return retry()
+    else:
+        exit()
+
+
+### これ以降の関数が重要 ###
+
+# 現在の状態の取得
+def get_state():
+
+    # 現在の手札情報を取得
+    #   - p_hand: プレイヤー手札
+    #   - d_hand: ディーラー手札（見えているもののみ）
+    p_hand, d_hand = get_current_hands()
+
+    # 「現在の状態」を設定
+    # ここでは例として，プレイヤー手札のスコアとプレイヤー手札の枚数の組を「現在の状態」とする
+    score = p_hand.get_score() # プレイヤー手札のスコア
+    length = p_hand.length() # プレイヤー手札の枚数
+    state = (score, length) # 現在の状態
+
+    return state
+
+# 行動戦略
+def select_action(state, strategy: Strategy):
+    global q_table
+
+    # Q値最大行動を選択する戦略
+    if strategy == Strategy.QMAX:
+        return q_table.get_best_action(state)
+
+    # ε-greedy
+    elif strategy == Strategy.E_GREEDY:
+        if np.random.rand() < EPS:
+            return select_action(state, strategy=Strategy.RANDOM)
+        else:
+            return q_table.get_best_action(state)
+
+    # ランダム戦略
+    else:
+        z = np.random.randint(0, 4)
+        if z == 0:
+            return Action.HIT
+        elif z == 1:
+            return Action.STAND
+        elif z == 2:
+            return Action.DOUBLE_DOWN
+        elif z == 3:
+            return Action.SURRENDER
+        else: # z == 4 のとき
+            return Action.RETRY
+
+
+### ここから処理開始 ###
+
+def main():
+    global g_retry_counter, player, soc, q_table
+
+    parser = argparse.ArgumentParser(description='AI Black Jack Player (Q-learning)')
+    parser.add_argument('--games', type=int, default=1, help='num. of games to play')
+    parser.add_argument('--history', type=str, default='play_log.csv', help='filename where game history will be saved')
+    parser.add_argument('--load', type=str, default='', help='filename of Q table to be loaded before learning')
+    parser.add_argument('--save', type=str, default='', help='filename where Q table will be saved after learning')
+    parser.add_argument('--testmode', help='this option runs the program without learning', action='store_true')
+    args = parser.parse_args()
+
+    n_games = args.games + 1
+
+    # Qテーブルをロード
+    if args.load != '':
+        q_table.load(args.load)
+
+    # ログファイルを開く
+    logfile = open(args.history, 'w')
+    print('score,hand_length,action,result,reward', file=logfile) # ログファイルにヘッダ行（項目名の行）を出力
+
+    # n_games回ゲームを実行
+    for n in range(1, n_games):
+
+        # nゲーム目を開始
+        game_start(n)
+
+        # 「現在の状態」を取得
+        state = get_state()
+
+        while True:
+
+            # 次に実行する行動を選択
+            if args.testmode:
+                action = select_action(state, Strategy.QMAX)
+            else:
+                action = select_action(state, Strategy.E_GREEDY)
+            if g_retry_counter >= RETRY_MAX and action == Action.RETRY:
+                # RETRY回数が上限に達しているにもかかわらずRETRYが選択された場合，他の行動をランダムに選択
+                action = np.random.choice([
+                    Action.HIT, Action.STAND, Action.DOUBLE_DOWN, Action.SURRENDER
+                ])
+            action_name = get_action_name(action) # 行動名を表す文字列を取得
+
+            # 選択した行動を実際に実行
+            # 戻り値:
+            #   - done: 終了フラグ．今回の行動によりゲームが終了したか否か（終了した場合はTrue, 続行中ならFalse）
+            #   - reward: 獲得金額（ゲーム続行中の場合は 0 , ただし RETRY を実行した場合は1回につき -BET/4 ）
+            #   - status: 行動実行後のプレイヤーステータス（バーストしたか否か，勝ちか負けか，などの状態を表す文字列）
+            reward, done, status = act(action)
+
+            # 実行した行動がRETRYだった場合はRETRY回数カウンターを1増やす
+            if action == Action.RETRY:
+                g_retry_counter += 1
+
+            # 「現在の状態」を再取得
+            prev_state = state # 行動前の状態を別変数に退避
+            prev_score = prev_state[0] # 行動前のプレイヤー手札のスコア（prev_state の一つ目の要素）
+            state = get_state()
+            score = state[0] # 行動後のプレイヤー手札のスコア（state の一つ目の要素）
+
+            # Qテーブルを更新
+            if not args.testmode:
+                _, V = q_table.get_best_action(state, with_value=True)
+                Q = q_table.get_Q_value(prev_state, action) # 現在のQ値
+                Q = (1 - LEARNING_RATE) * Q + LEARNING_RATE * (reward + DISCOUNT_FACTOR * V) # 新しいQ値
+                q_table.set_Q_value(prev_state, action, Q) # 新しいQ値を登録
+
+            # ログファイルに「行動前の状態」「行動の種類」「行動結果」「獲得金額」などの情報を記録
+            print('{},{},{},{},{}'.format(prev_state[0], prev_state[1], action_name, status, reward), file=logfile)
+
+            # 終了フラグが立った場合はnゲーム目を終了
+            if done == True:
+                break
+
+        print('')
+
+    # ログファイルを閉じる
+    logfile.close()
+
+    # Qテーブルをセーブ
     if args.save != '':
         q_table.save(args.save)
-        print(f"Q-table saved to {args.save}")
+
 
 if __name__ == '__main__':
     main()

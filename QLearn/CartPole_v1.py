@@ -26,7 +26,7 @@ def get_action_name(action: Action):
         return 'UNDEFINED'
 
 # Q学習の設定値（これらの設定値が妥当だとは限らない）
-EPS = 0.1 # ε-greedyにおけるε
+EPS = 0.05 # ε-greedyにおけるε
 LEARNING_RATE = 0.1 # 学習率
 DISCOUNT_FACTOR = 0.9 # 割引率
 
@@ -85,7 +85,7 @@ def select_action(state, strategy: Strategy):
 def main():
 
     parser = argparse.ArgumentParser(description='OpenAI Gym CartPole-v0')
-    parser.add_argument('--games', type=int, default=1, help='num. of games to play')
+    parser.add_argument('--games', type=int, default=10000, help='num. of games to play')
     parser.add_argument('--max_steps', type=int, default=200, help='max num. of steps per game')
     parser.add_argument('--load', type=str, default='', help='filename of Q table to be loaded before learning')
     parser.add_argument('--save', type=str, default='', help='filename where Q table will be saved after learning')
@@ -100,8 +100,8 @@ def main():
     MAX_STEPS = args.max_steps
 
     # ゲーム環境を作成
-    env = gym.make(GAME_NAME, render_mode='human')
-    #env = gym.make(GAME_NAME) # このように render_mode='human' の指定を外すとゲーム画面が描画されなくなり高速に動作する
+    #env = gym.make(GAME_NAME, render_mode='human')
+    env = gym.make(GAME_NAME) # このように render_mode='human' の指定を外すとゲーム画面が描画されなくなり高速に動作する
 
     # Qテーブルをロード
     if args.load != '':

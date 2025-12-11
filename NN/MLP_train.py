@@ -9,142 +9,132 @@ import torch.nn as nn
 import torch.optim as optim
 from tqdm import tqdm
 from torch.utils.data import DataLoader, random_split
-from networks import SampleMLP, myMLP
+from .networks import SampleMLP
 from mylib.data_io import CSVBasedDataset
-from mylib.visualizers import ClassifierVisualizer
 from mylib.utility import print_args
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 # データセットファイル
-DATASET_CSV = './csv_data/weather_train.csv'
+DATASET_CSV = './NN/csv_data/student_exam_scores.csv'
 
 # 学習結果の保存先フォルダ
-MODEL_DIR = './MLP_models'
+MODEL_DIR = './NN/MLP_models'
 
-# 学習過程を可視化するか否か
-# 入力が2次元ベクトルでないときにTrueを指定するとエラーになる
-VISUALIZE = True
-
-
-def main():
-
-    # デバイス, エポック数, バッチサイズなどをコマンドライン引数から取得し変数に保存
-    parser = argparse.ArgumentParser(description='Multi-Layer Perceptron Sample Code (training)')
-    parser.add_argument('--gpu', '-g', default=-1, type=int, help='GPU/CUDA ID (negative value indicates CPU)')
-    parser.add_argument('--epochs', '-e', default=50, type=int, help='number of epochs to learn')
-    parser.add_argument('--batchsize', '-b', default=100, type=int, help='minibatch size')
-    parser.add_argument('--model', '-m', default=os.path.join(MODEL_DIR, 'model.pth'), type=str, help='file path of trained model')
-    parser.add_argument('--autosave', '-s', help='this option makes the model automatically saved in each epoch', action='store_true')
-    args = print_args(parser.parse_args())
-    DEVICE = args['device']
-    N_EPOCHS = args['epochs']
-    BATCH_SIZE = args['batchsize']
-    MODEL_PATH = args['model']
-    AUTO_SAVE = args['autosave']
-
-    # CSVファイルを読み込み, 訓練データセットを用意
+# --- 1回分の学習を実行する関数 ---
+def train_single_run(DEVICE, N_EPOCHS, BATCH_SIZE, MODEL_DIR):
+    # lossを記録するためのリストを初期化
+    train_loss_list = []
+    valid_loss_list = []
+    
+    # CSVファイルを読み込み, データセットを用意
     dataset = CSVBasedDataset(
-        filename = DATASET_CSV,
-        items = [
-            ['平均気温', '平均湿度'], # X
-            '天気概況' # Y
-        ],
-        dtypes = [
-            'float', # Xの型
-            'label' # Yの型
-        ],
+        filename=DATASET_CSV,
+        items=[['hours_studied', 'sleep_hours', 'attendance_percent', 'previous_scores'], 'exam_score'],
+        dtypes=[np.float32, np.float32]
     )
-    with open(os.path.join(MODEL_DIR, 'fdicts.pkl'), 'wb') as fdicts_file:
-        pickle.dump(dataset.forward_dicts, fdicts_file)
 
-    # 訓練データセットを分割し，一方を検証用に回す
-    dataset_size = len(dataset)
-    valid_size = int(0.05 * dataset_size) # 全体の 5% を検証用に
-    train_size = dataset_size - valid_size # 残りの 95% を学習用に
+    # 訓練データセットと検証データセットに分割
+    train_size = int(0.95 * len(dataset))
+    valid_size = len(dataset) - train_size
     train_dataset, valid_dataset = random_split(dataset, [train_size, valid_size])
+    train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+    valid_dataloader = DataLoader(valid_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
-    # 訓練データおよび検証用データをミニバッチに分けて使用するための「データローダ」を用意
-    train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, pin_memory=False)
-    valid_dataloader = DataLoader(valid_dataset, batch_size=BATCH_SIZE, shuffle=False, pin_memory=False)
-
-    # 学習経過を可視化する準備
-    if VISUALIZE:
-        visualizer = ClassifierVisualizer(
-            n_classes = 3,
-            clabels = ['sunny', 'cloudy', 'rainy'],
-            hrange = [-5, 40],
-            vrange = [20, 110],
-            hlabel = 'temperature (degree)',
-            vlabel = 'humidity (%)',
-            bins = 10
-        )
-        samples_for_visualization = train_dataset[:200]
-
-    # ニューラルネットワークの作成
+    # モデル（ニューラルネットワーク）
     model = SampleMLP().to(DEVICE)
-    #model = myMLP().to(DEVICE) # myMLPクラスを用いる場合はこちらを使用
-
-    # 最適化アルゴリズムの指定（ここでは Adam を使用）
+    
+    # 最適化手法
     optimizer = optim.Adam(model.parameters())
+    
+    # 損失関数
+    loss_func = nn.MSELoss()
 
-    # 損失関数：クロスエントロピー損失を使用
-    loss_func = nn.CrossEntropyLoss()
-
-    # 勾配降下法による繰り返し学習
+    # 学習ループ
     for epoch in range(N_EPOCHS):
-
-        print('Epoch {0}:'.format(epoch + 1))
-
-        # 学習
+        # 訓練
         model.train()
-        sum_loss = 0
-        for X, Y in tqdm(train_dataloader):
-            for param in model.parameters():
-                param.grad = None
+        sum_train_loss = 0
+        for X, Y in train_dataloader:
             X = X.to(DEVICE)
-            Y = Y.to(DEVICE)
-            Y_pred = model(X) # 入力値 X を現在のニューラルネットワークに入力し，出力の推定値を得る
-            loss = loss_func(Y_pred, Y) # 損失関数の現在値を計算
-            loss.backward() # 誤差逆伝播法により，個々のパラメータに関する損失関数の勾配（偏微分）を計算
-            optimizer.step() # 勾配に沿ってパラメータの値を更新
-            sum_loss += float(loss.detach()) * len(X)
-        avg_loss = sum_loss / train_size
-        print('train loss = {0:.6f}'.format(avg_loss))
+            Y = Y.float().view(-1, 1).to(DEVICE)
+            optimizer.zero_grad()
+            Y_pred = model(X)
+            loss = loss_func(Y_pred, Y)
+            loss.backward()
+            optimizer.step()
+            sum_train_loss += float(loss.detach()) * len(X)
+        avg_train_loss = sum_train_loss / train_size
+        train_loss_list.append(avg_train_loss)
 
         # 検証
         model.eval()
-        sum_loss = 0
-        n_failed = 0
+        sum_valid_loss = 0
         with torch.inference_mode():
-            for X, Y in tqdm(valid_dataloader):
+            for X, Y in valid_dataloader:
                 X = X.to(DEVICE)
-                Y = Y.to(DEVICE)
+                Y = Y.float().view(-1, 1).to(DEVICE)
                 Y_pred = model(X)
                 loss = loss_func(Y_pred, Y)
-                sum_loss += float(loss.detach()) * len(X)
-                n_failed += torch.count_nonzero(torch.argmax(Y_pred, dim=1) - Y) # 推定値と正解値が一致していないデータの個数を数える
-        avg_loss = sum_loss / valid_size
-        accuracy = (valid_size - n_failed) / valid_size
-        print('valid loss = {0:.6f}'.format(avg_loss))
-        print('accuracy = {0:.2f}%'.format(100 * accuracy))
-        print('')
+                sum_valid_loss += float(loss.detach()) * len(X)
+        avg_valid_loss = sum_valid_loss / valid_size
+        valid_loss_list.append(avg_valid_loss)
 
-        # 学習途中のモデルの保存
-        if AUTO_SAVE:
-            torch.save(model.to('cpu').state_dict(), os.path.join(MODEL_DIR, 'autosaved_model_ep{0}.pth'.format(epoch + 1)))
-            model.to(DEVICE)
+    # この関数は、最後にlossのリストを返す
+    return train_loss_list, valid_loss_list
 
-        # 学習経過の可視化
-        if VISUALIZE:
-            visualizer.show(
-                model,
-                class_colors = [[255, 0, 0], [127, 127, 0], [0, 0, 255]],
-                samples = samples_for_visualization,
-                title = 'Epoch {0}'.format(epoch + 1)
-            )
+# --- 全体を管理するメイン関数 ---
+def main():
+    # コマンドライン引数の設定
+    parser = argparse.ArgumentParser(description='Multi-Layer Perceptron Sample Code (training)')
+    parser.add_argument('--epochs', '-e', default=50, type=int, help='number of epochs to learn')
+    parser.add_argument('--batchsize', '-b', default=50, type=int, help='minibatch size')
+    args = print_args(parser.parse_args())
+    DEVICE = 'cpu' # CPUを使用
+    N_EPOCHS = args['epochs']
+    BATCH_SIZE = args['batchsize']
 
-    # 学習結果のニューラルネットワークモデルをファイルに保存
-    torch.save(model.to('cpu').state_dict(), MODEL_PATH)
+    N_RUNS = 10  # 実行回数を10回に設定
+    all_train_losses = []
+    all_valid_losses = []
+
+    # 10回学習を繰り返すループ
+    for i in range(N_RUNS):
+        print(f'--- Run {i+1}/{N_RUNS} ---')
+        # 1回分の学習を実行し、結果を受け取る
+        train_loss, valid_loss = train_single_run(DEVICE, N_EPOCHS, BATCH_SIZE, MODEL_DIR)
+        all_train_losses.append(train_loss)
+        all_valid_losses.append(valid_loss)
+    
+    # --- 平均と標準偏差を計算 ---
+    train_losses_np = np.array(all_train_losses)
+    valid_losses_np = np.array(all_valid_losses)
+    
+    mean_train_loss = np.mean(train_losses_np, axis=0)
+    std_train_loss = np.std(train_losses_np, axis=0)
+    mean_valid_loss = np.mean(valid_losses_np, axis=0)
+    std_valid_loss = np.std(valid_losses_np, axis=0)
+
+    # --- 平均学習曲線のグラフを描画 ---
+    plt.figure(figsize=(10, 5))
+    epochs_range = range(1, N_EPOCHS + 1)
+    
+    plt.plot(epochs_range, mean_train_loss, label='mean_train_loss')
+    plt.plot(epochs_range, mean_valid_loss, label='mean_valid_loss')
+    
+    plt.fill_between(epochs_range, mean_train_loss - std_train_loss, mean_train_loss + std_train_loss, alpha=0.2)
+    plt.fill_between(epochs_range, mean_valid_loss - std_valid_loss, mean_valid_loss + std_valid_loss, alpha=0.2)
+    
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss (MSE)')
+    plt.title(f'Average Loss Curve over {N_RUNS} runs\nBatchSize: {BATCH_SIZE}')
+    plt.legend()
+    plt.grid()
+    
+    graph_filename = os.path.join(MODEL_DIR, f'average_loss_layer4_epoch{N_EPOCHS}_batchsize{BATCH_SIZE}_percep50-100-50.png')
+    plt.savefig(graph_filename)
+    print(f'Average loss curve graph saved to {graph_filename}')
 
 
 if __name__ == '__main__':

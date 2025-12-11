@@ -1,2 +1,1071 @@
 score,hand_length,action,result,reward
-13,2,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,win,40
+20.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,win,40
+14.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,STAND,lose,-20
+7.0,2.0,STAND,lose,-20
+18.0,2.0,STAND,lose,-20
+16.0,2.0,DOUBLE DOWN,lose,-40
+13.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,bust,-40
+9.0,2.0,STAND,win,20
+15.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,win,40
+19.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,lose,-40
+11.0,2.0,DOUBLE DOWN,win,40
+15.0,2.0,DOUBLE DOWN,win,40
+10.0,2.0,STAND,lose,-20
+20.0,2.0,SURRENDER,surrendered,-10
+11.0,2.0,DOUBLE DOWN,lose,-40
+14.0,2.0,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+17.0,2.0,SURRENDER,surrendered,-10
+9.0,2.0,DOUBLE DOWN,win,40
+17.0,2.0,DOUBLE DOWN,lose,-40
+14.0,2.0,DOUBLE DOWN,bust,-40
+7.0,2.0,STAND,lose,-20
+19.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+11.0,2.0,DOUBLE DOWN,win,40
+11.0,2.0,HIT,unsettled,0
+21.0,3.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,win,40
+13.0,2.0,DOUBLE DOWN,win,40
+8.0,2.0,STAND,lose,-20
+12.0,2.0,HIT,unsettled,0
+12.0,3.0,DOUBLE DOWN,win,40
+9.0,2.0,STAND,lose,-20
+20.0,2.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+11.0,2.0,DOUBLE DOWN,lose,-40
+14.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,HIT,unsettled,0
+14.0,3.0,DOUBLE DOWN,win,40
+6.0,2.0,STAND,lose,-20
+19.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,win,40
+13.0,2.0,DOUBLE DOWN,lose,-40
+9.0,2.0,STAND,lose,-20
+17.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,lose,-40
+10.0,2.0,STAND,lose,-20
+21.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+4.0,2.0,STAND,lose,-20
+5.0,2.0,STAND,lose,-20
+20.0,2.0,SURRENDER,surrendered,-10
+11.0,2.0,DOUBLE DOWN,lose,-40
+11.0,2.0,DOUBLE DOWN,win,40
+21.0,2.0,SURRENDER,surrendered,-10
+5.0,2.0,STAND,win,20
+13.0,2.0,DOUBLE DOWN,win,40
+12.0,2.0,DOUBLE DOWN,win,40
+14.0,2.0,HIT,bust,-20
+10.0,2.0,STAND,win,20
+16.0,2.0,DOUBLE DOWN,bust,-40
+10.0,2.0,STAND,lose,-20
+13.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,win,40
+7.0,2.0,STAND,lose,-20
+17.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,DOUBLE DOWN,lose,-40
+11.0,2.0,DOUBLE DOWN,lose,-40
+5.0,2.0,STAND,lose,-20
+11.0,2.0,HIT,unsettled,0
+21.0,3.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,win,40
+21.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+14.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,draw,0
+12.0,2.0,DOUBLE DOWN,bust,-40
+7.0,2.0,STAND,lose,-20
+5.0,2.0,STAND,lose,-20
+14.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+4.0,2.0,STAND,win,20
+9.0,2.0,STAND,lose,-20
+19.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,DOUBLE DOWN,win,40
+9.0,2.0,HIT,unsettled,0
+19.0,3.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+21.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,DOUBLE DOWN,lose,-40
+9.0,2.0,STAND,win,20
+12.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,win,40
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+11.0,2.0,DOUBLE DOWN,win,40
+14.0,2.0,DOUBLE DOWN,win,40
+21.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+5.0,2.0,STAND,lose,-20
+18.0,2.0,SURRENDER,surrendered,-10
+9.0,2.0,HIT,unsettled,0
+15.0,3.0,DOUBLE DOWN,lose,-40
+17.0,2.0,DOUBLE DOWN,lose,-40
+19.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+14.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+9.0,2.0,STAND,win,20
+17.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,STAND,lose,-20
+18.0,2.0,DOUBLE DOWN,bust,-40
+11.0,2.0,STAND,win,20
+7.0,2.0,STAND,lose,-20
+14.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,win,40
+9.0,2.0,HIT,unsettled,0
+20.0,3.0,SURRENDER,surrendered,-10
+11.0,2.0,HIT,unsettled,0
+21.0,3.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,win,40
+17.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+4.0,2.0,STAND,lose,-20
+12.0,2.0,DOUBLE DOWN,lose,-40
+8.0,2.0,STAND,win,20
+16.0,2.0,DOUBLE DOWN,bust,-40
+21.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,draw,0
+20.0,2.0,HIT,unsettled,0
+14.0,3.0,DOUBLE DOWN,lose,-40
+11.0,2.0,DOUBLE DOWN,win,40
+18.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,STAND,lose,-20
+10.0,2.0,STAND,win,20
+18.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+11.0,2.0,HIT,unsettled,0
+14.0,3.0,DOUBLE DOWN,win,40
+17.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+21.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+14.0,2.0,DOUBLE DOWN,lose,-40
+14.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+17.0,2.0,HIT,unsettled,0
+13.0,3.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,lose,-40
+13.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,bust,-40
+14.0,2.0,DOUBLE DOWN,lose,-40
+18.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,HIT,unsettled,0
+20.0,3.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,win,40
+15.0,2.0,DOUBLE DOWN,win,40
+11.0,2.0,DOUBLE DOWN,win,40
+20.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,HIT,unsettled,0
+17.0,3.0,DOUBLE DOWN,win,40
+15.0,2.0,DOUBLE DOWN,lose,-40
+10.0,2.0,DOUBLE DOWN,draw,0
+13.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+11.0,2.0,DOUBLE DOWN,lose,-40
+15.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,win,40
+6.0,2.0,STAND,lose,-20
+14.0,2.0,DOUBLE DOWN,bust,-40
+5.0,2.0,STAND,win,20
+20.0,2.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,win,40
+13.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,draw,0
+17.0,2.0,DOUBLE DOWN,lose,-40
+19.0,2.0,SURRENDER,surrendered,-10
+5.0,2.0,STAND,lose,-20
+16.0,2.0,DOUBLE DOWN,bust,-40
+14.0,2.0,DOUBLE DOWN,draw,0
+20.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,HIT,unsettled,0
+18.0,3.0,SURRENDER,surrendered,-10
+17.0,2.0,DOUBLE DOWN,bust,-40
+10.0,2.0,DOUBLE DOWN,lose,-40
+21.0,2.0,SURRENDER,surrendered,-10
+11.0,2.0,DOUBLE DOWN,win,40
+15.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,win,40
+12.0,2.0,DOUBLE DOWN,bust,-40
+10.0,2.0,HIT,unsettled,0
+20.0,3.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+21.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+9.0,2.0,DOUBLE DOWN,lose,-40
+7.0,2.0,STAND,win,20
+10.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,win,40
+11.0,2.0,DOUBLE DOWN,win,40
+7.0,2.0,STAND,lose,-20
+13.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,lose,-40
+14.0,2.0,DOUBLE DOWN,draw,0
+18.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,STAND,lose,-20
+13.0,2.0,HIT,unsettled,0
+15.0,3.0,HIT,unsettled,0
+16.0,4.0,HIT,unsettled,0
+16.0,5.0,RETRY,unsettled,-5
+16.0,5.0,RETRY,unsettled,-5
+13.0,5.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,DOUBLE DOWN,bust,-40
+10.0,2.0,HIT,unsettled,0
+14.0,3.0,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,DOUBLE DOWN,win,40
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,lose,-40
+21.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,win,40
+12.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,draw,0
+17.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,bust,-40
+7.0,2.0,STAND,win,20
+15.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,bust,-40
+8.0,2.0,STAND,win,20
+13.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,lose,-40
+18.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,DOUBLE DOWN,bust,-40
+10.0,2.0,STAND,lose,-20
+10.0,2.0,STAND,win,20
+13.0,2.0,DOUBLE DOWN,win,40
+7.0,2.0,STAND,lose,-20
+11.0,2.0,HIT,unsettled,0
+21.0,3.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,win,40
+14.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,HIT,unsettled,0
+21.0,3.0,SURRENDER,surrendered,-10
+8.0,2.0,STAND,lose,-20
+16.0,2.0,DOUBLE DOWN,lose,-40
+21.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,DOUBLE DOWN,lose,-40
+14.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,STAND,lose,-20
+17.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+11.0,2.0,DOUBLE DOWN,lose,-40
+8.0,2.0,STAND,lose,-20
+15.0,2.0,DOUBLE DOWN,bust,-40
+4.0,2.0,STAND,lose,-20
+14.0,2.0,DOUBLE DOWN,bust,-40
+10.0,2.0,DOUBLE DOWN,win,40
+12.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+7.0,2.0,STAND,lose,-20
+5.0,2.0,STAND,lose,-20
+11.0,2.0,DOUBLE DOWN,lose,-40
+21.0,2.0,SURRENDER,surrendered,-10
+11.0,2.0,HIT,unsettled,0
+15.0,3.0,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,bust,-40
+11.0,2.0,DOUBLE DOWN,win,40
+18.0,2.0,SURRENDER,surrendered,-10
+8.0,2.0,HIT,unsettled,0
+13.0,3.0,DOUBLE DOWN,win,40
+17.0,2.0,HIT,unsettled,0
+17.0,3.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,draw,0
+12.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,STAND,win,20
+18.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,win,40
+9.0,2.0,HIT,unsettled,0
+20.0,3.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+17.0,2.0,DOUBLE DOWN,bust,-40
+11.0,2.0,DOUBLE DOWN,lose,-40
+8.0,2.0,HIT,unsettled,0
+18.0,3.0,SURRENDER,surrendered,-10
+6.0,2.0,STAND,lose,-20
+16.0,2.0,DOUBLE DOWN,bust,-40
+21.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,STAND,lose,-20
+16.0,2.0,DOUBLE DOWN,bust,-40
+21.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,STAND,win,20
+8.0,2.0,STAND,lose,-20
+9.0,2.0,STAND,lose,-20
+15.0,2.0,DOUBLE DOWN,win,40
+17.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,lose,-40
+21.0,2.0,SURRENDER,surrendered,-10
+17.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,win,40
+18.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,lose,-40
+16.0,2.0,DOUBLE DOWN,lose,-40
+19.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+7.0,2.0,STAND,lose,-20
+20.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,STAND,lose,-20
+4.0,2.0,STAND,win,20
+5.0,2.0,STAND,lose,-20
+12.0,2.0,STAND,lose,-20
+16.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,STAND,lose,-20
+10.0,2.0,STAND,lose,-20
+16.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,STAND,lose,-20
+13.0,2.0,DOUBLE DOWN,lose,-40
+10.0,2.0,STAND,lose,-20
+12.0,2.0,DOUBLE DOWN,lose,-40
+21.0,2.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,draw,0
+20.0,2.0,SURRENDER,surrendered,-10
+17.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,HIT,unsettled,0
+13.0,3.0,DOUBLE DOWN,win,40
+9.0,2.0,HIT,unsettled,0
+15.0,3.0,DOUBLE DOWN,draw,0
+13.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,DOUBLE DOWN,bust,-40
+10.0,2.0,HIT,unsettled,0
+13.0,3.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,STAND,lose,-20
+20.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,STAND,lose,-20
+20.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,lose,-40
+16.0,2.0,STAND,lose,-20
+11.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,STAND,lose,-20
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,HIT,unsettled,0
+14.0,3.0,DOUBLE DOWN,win,40
+14.0,2.0,DOUBLE DOWN,win,40
+11.0,2.0,DOUBLE DOWN,lose,-40
+4.0,2.0,STAND,win,20
+6.0,2.0,STAND,win,20
+16.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,win,40
+8.0,2.0,STAND,lose,-20
+5.0,2.0,STAND,lose,-20
+16.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,win,40
+11.0,2.0,STAND,win,20
+13.0,2.0,DOUBLE DOWN,bust,-40
+10.0,2.0,HIT,unsettled,0
+21.0,3.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,HIT,unsettled,0
+18.0,3.0,HIT,unsettled,0
+18.0,4.0,SURRENDER,surrendered,-10
+14.0,2.0,HIT,unsettled,0
+14.0,3.0,DOUBLE DOWN,bust,-40
+7.0,2.0,STAND,lose,-20
+15.0,2.0,DOUBLE DOWN,win,40
+17.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,win,40
+15.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,win,40
+12.0,2.0,DOUBLE DOWN,win,40
+11.0,2.0,DOUBLE DOWN,lose,-40
+15.0,2.0,DOUBLE DOWN,draw,0
+12.0,2.0,DOUBLE DOWN,bust,-40
+14.0,2.0,DOUBLE DOWN,win,40
+20.0,2.0,SURRENDER,surrendered,-10
+8.0,2.0,STAND,lose,-20
+17.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,win,40
+18.0,2.0,SURRENDER,surrendered,-10
+5.0,2.0,STAND,lose,-20
+15.0,2.0,DOUBLE DOWN,lose,-40
+11.0,2.0,HIT,unsettled,0
+20.0,3.0,SURRENDER,surrendered,-10
+8.0,2.0,STAND,win,20
+13.0,2.0,DOUBLE DOWN,win,40
+13.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,STAND,win,20
+15.0,2.0,DOUBLE DOWN,win,40
+14.0,2.0,STAND,lose,-20
+14.0,2.0,DOUBLE DOWN,win,40
+18.0,2.0,SURRENDER,surrendered,-10
+11.0,2.0,DOUBLE DOWN,lose,-40
+13.0,2.0,DOUBLE DOWN,win,40
+13.0,2.0,HIT,unsettled,0
+13.0,3.0,DOUBLE DOWN,win,40
+12.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,STAND,lose,-20
+10.0,2.0,HIT,unsettled,0
+14.0,3.0,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+5.0,2.0,STAND,lose,-20
+16.0,2.0,DOUBLE DOWN,lose,-40
+21.0,2.0,SURRENDER,surrendered,-10
+7.0,2.0,STAND,win,20
+11.0,2.0,STAND,lose,-20
+15.0,2.0,DOUBLE DOWN,bust,-40
+7.0,2.0,DOUBLE DOWN,lose,-40
+13.0,2.0,DOUBLE DOWN,win,40
+11.0,2.0,DOUBLE DOWN,win,40
+9.0,2.0,STAND,lose,-20
+17.0,2.0,DOUBLE DOWN,win,40
+14.0,2.0,DOUBLE DOWN,win,40
+18.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,lose,-40
+13.0,2.0,DOUBLE DOWN,draw,0
+7.0,2.0,STAND,lose,-20
+18.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,STAND,draw,0
+13.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,STAND,lose,-20
+17.0,2.0,DOUBLE DOWN,bust,-40
+21.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,draw,0
+14.0,2.0,DOUBLE DOWN,bust,-40
+11.0,2.0,STAND,lose,-20
+12.0,2.0,DOUBLE DOWN,lose,-40
+9.0,2.0,STAND,lose,-20
+12.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,lose,-40
+16.0,2.0,DOUBLE DOWN,win,40
+19.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,win,40
+17.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,HIT,unsettled,0
+15.0,3.0,DOUBLE DOWN,win,40
+21.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+5.0,2.0,STAND,win,20
+16.0,2.0,DOUBLE DOWN,win,40
+21.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,bust,-40
+8.0,2.0,HIT,unsettled,0
+15.0,3.0,DOUBLE DOWN,win,40
+14.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+17.0,2.0,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,lose,-40
+15.0,2.0,DOUBLE DOWN,bust,-40
+4.0,2.0,STAND,win,20
+14.0,2.0,STAND,lose,-20
+11.0,2.0,DOUBLE DOWN,win,40
+20.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,win,40
+18.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,win,40
+17.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+21.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,STAND,lose,-20
+12.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+11.0,2.0,DOUBLE DOWN,lose,-40
+8.0,2.0,STAND,win,20
+12.0,2.0,STAND,win,20
+20.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,lose,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,HIT,unsettled,0
+18.0,3.0,SURRENDER,surrendered,-10
+17.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,lose,-40
+16.0,2.0,DOUBLE DOWN,win,40
+11.0,2.0,DOUBLE DOWN,win,40
+15.0,2.0,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,lose,-40
+21.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,HIT,unsettled,0
+17.0,3.0,DOUBLE DOWN,bust,-40
+8.0,2.0,HIT,unsettled,0
+15.0,3.0,DOUBLE DOWN,win,40
+20.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,bust,-40
+14.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,DOUBLE DOWN,win,40
+9.0,2.0,STAND,lose,-20
+16.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,HIT,unsettled,0
+19.0,3.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+11.0,2.0,HIT,unsettled,0
+19.0,3.0,SURRENDER,surrendered,-10
+17.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,bust,-40
+5.0,2.0,STAND,lose,-20
+19.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,win,40
+14.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+7.0,2.0,STAND,win,20
+8.0,2.0,HIT,unsettled,0
+18.0,3.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,win,40
+21.0,2.0,SURRENDER,surrendered,-10
+6.0,2.0,STAND,lose,-20
+13.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,draw,0
+5.0,2.0,STAND,lose,-20
+8.0,2.0,STAND,win,20
+17.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,lose,-40
+5.0,2.0,STAND,lose,-20
+13.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,lose,-40
+14.0,2.0,DOUBLE DOWN,draw,0
+13.0,2.0,DOUBLE DOWN,lose,-40
+19.0,2.0,SURRENDER,surrendered,-10
+9.0,2.0,STAND,lose,-20
+15.0,2.0,DOUBLE DOWN,lose,-40
+16.0,2.0,DOUBLE DOWN,win,40
+20.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,lose,-40
+21.0,2.0,SURRENDER,surrendered,-10
+8.0,2.0,STAND,lose,-20
+13.0,2.0,DOUBLE DOWN,lose,-40
+14.0,2.0,DOUBLE DOWN,bust,-40
+11.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,win,40
+14.0,2.0,DOUBLE DOWN,win,40
+21.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,bust,-40
+4.0,2.0,STAND,lose,-20
+10.0,2.0,STAND,win,20
+15.0,2.0,DOUBLE DOWN,bust,-40
+5.0,2.0,STAND,lose,-20
+18.0,2.0,SURRENDER,surrendered,-10
+17.0,2.0,DOUBLE DOWN,win,40
+21.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,STAND,lose,-20
+20.0,2.0,SURRENDER,surrendered,-10
+17.0,2.0,DOUBLE DOWN,bust,-40
+7.0,2.0,STAND,lose,-20
+17.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+11.0,2.0,HIT,unsettled,0
+13.0,3.0,DOUBLE DOWN,draw,0
+16.0,2.0,DOUBLE DOWN,win,40
+8.0,2.0,STAND,win,20
+4.0,2.0,STAND,win,20
+8.0,2.0,HIT,unsettled,0
+18.0,3.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,win,40
+18.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,lose,-40
+7.0,2.0,STAND,lose,-20
+4.0,2.0,STAND,lose,-20
+19.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,bust,-40
+14.0,2.0,STAND,win,20
+12.0,2.0,DOUBLE DOWN,win,40
+8.0,2.0,STAND,lose,-20
+19.0,2.0,SURRENDER,surrendered,-10
+8.0,2.0,STAND,win,20
+14.0,2.0,DOUBLE DOWN,lose,-40
+13.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+8.0,2.0,STAND,lose,-20
+18.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,STAND,win,20
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+4.0,2.0,STAND,win,20
+20.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,STAND,lose,-20
+15.0,2.0,HIT,unsettled,0
+18.0,3.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,bust,-40
+21.0,2.0,SURRENDER,surrendered,-10
+7.0,2.0,STAND,lose,-20
+14.0,2.0,DOUBLE DOWN,bust,-40
+5.0,2.0,STAND,lose,-20
+14.0,2.0,STAND,win,20
+12.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,STAND,lose,-20
+16.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,draw,0
+13.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,lose,-40
+13.0,2.0,DOUBLE DOWN,bust,-40
+14.0,2.0,DOUBLE DOWN,win,40
+9.0,2.0,STAND,lose,-20
+19.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,lose,-40
+16.0,2.0,DOUBLE DOWN,lose,-40
+13.0,2.0,DOUBLE DOWN,win,40
+9.0,2.0,DOUBLE DOWN,lose,-40
+8.0,2.0,STAND,lose,-20
+7.0,2.0,STAND,win,20
+7.0,2.0,STAND,lose,-20
+14.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,HIT,unsettled,0
+16.0,3.0,DOUBLE DOWN,bust,-40
+9.0,2.0,STAND,win,20
+14.0,2.0,DOUBLE DOWN,draw,0
+12.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,lose,-40
+18.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,STAND,lose,-20
+21.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+4.0,2.0,STAND,win,20
+13.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,HIT,unsettled,0
+14.0,3.0,DOUBLE DOWN,win,40
+10.0,2.0,HIT,unsettled,0
+20.0,3.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,lose,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,draw,0
+13.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,bust,-40
+10.0,2.0,DOUBLE DOWN,win,40
+12.0,2.0,DOUBLE DOWN,lose,-40
+15.0,2.0,DOUBLE DOWN,win,40
+9.0,2.0,STAND,win,20
+13.0,2.0,DOUBLE DOWN,bust,-40
+11.0,2.0,DOUBLE DOWN,win,40
+17.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+17.0,2.0,DOUBLE DOWN,win,40
+19.0,2.0,DOUBLE DOWN,bust,-40
+8.0,2.0,HIT,unsettled,0
+18.0,3.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+9.0,2.0,HIT,unsettled,0
+19.0,3.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,lose,-40
+18.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,STAND,win,20
+18.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,win,40
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,STAND,win,20
+16.0,2.0,STAND,lose,-20
+13.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+8.0,2.0,STAND,lose,-20
+12.0,2.0,DOUBLE DOWN,win,40
+18.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+10.0,2.0,HIT,unsettled,0
+12.0,3.0,DOUBLE DOWN,bust,-40
+21.0,2.0,SURRENDER,surrendered,-10
+11.0,2.0,HIT,unsettled,0
+18.0,3.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,lose,-40
+11.0,2.0,DOUBLE DOWN,draw,0
+18.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,DOUBLE DOWN,lose,-40
+8.0,2.0,STAND,win,20
+5.0,2.0,STAND,win,20
+15.0,2.0,DOUBLE DOWN,bust,-40
+21.0,2.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+17.0,2.0,DOUBLE DOWN,lose,-40
+14.0,2.0,DOUBLE DOWN,bust,-40
+14.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,HIT,unsettled,0
+16.0,3.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,HIT,unsettled,0
+20.0,3.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,draw,0
+16.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,DOUBLE DOWN,lose,-40
+14.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,lose,-40
+16.0,2.0,DOUBLE DOWN,win,40
+15.0,2.0,DOUBLE DOWN,bust,-40
+8.0,2.0,HIT,unsettled,0
+19.0,3.0,SURRENDER,surrendered,-10
+7.0,2.0,STAND,lose,-20
+15.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,DOUBLE DOWN,lose,-40
+15.0,2.0,DOUBLE DOWN,bust,-40
+7.0,2.0,STAND,lose,-20
+20.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,win,40
+15.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,win,40
+21.0,2.0,SURRENDER,surrendered,-10
+17.0,2.0,STAND,lose,-20
+15.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,bust,-40
+9.0,2.0,STAND,lose,-20
+11.0,2.0,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,bust,-40
+21.0,2.0,SURRENDER,surrendered,-10
+11.0,2.0,HIT,unsettled,0
+14.0,3.0,DOUBLE DOWN,bust,-40
+11.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,lose,-40
+13.0,2.0,STAND,lose,-20
+17.0,2.0,STAND,lose,-20
+14.0,2.0,DOUBLE DOWN,bust,-40
+5.0,2.0,STAND,lose,-20
+14.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,SURRENDER,surrendered,-10
+8.0,2.0,STAND,win,20
+10.0,2.0,STAND,lose,-20
+14.0,2.0,DOUBLE DOWN,draw,0
+19.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,lose,-40
+10.0,2.0,HIT,unsettled,0
+18.0,3.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,HIT,unsettled,0
+15.0,3.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+12.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,win,40
+14.0,2.0,DOUBLE DOWN,bust,-40
+8.0,2.0,STAND,lose,-20
+13.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+11.0,2.0,STAND,win,20
+20.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,STAND,lose,-20
+20.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,bust,-40
+8.0,2.0,STAND,lose,-20
+8.0,2.0,STAND,lose,-20
+17.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,HIT,unsettled,0
+16.0,3.0,STAND,lose,-20
+18.0,2.0,SURRENDER,surrendered,-10
+17.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,lose,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+8.0,2.0,STAND,lose,-20
+14.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,bust,-40
+8.0,2.0,STAND,lose,-20
+14.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+7.0,2.0,STAND,win,20
+19.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,win,40
+14.0,2.0,STAND,win,20
+20.0,2.0,SURRENDER,surrendered,-10
+7.0,2.0,STAND,win,20
+10.0,2.0,HIT,unsettled,0
+15.0,3.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,win,40
+12.0,2.0,DOUBLE DOWN,bust,-40
+19.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,lose,-40
+11.0,2.0,DOUBLE DOWN,lose,-40
+13.0,2.0,STAND,lose,-20
+20.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+10.0,2.0,DOUBLE DOWN,win,40
+12.0,2.0,DOUBLE DOWN,bust,-40
+7.0,2.0,STAND,lose,-20
+13.0,2.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,STAND,lose,-20
+13.0,2.0,DOUBLE DOWN,win,40
+15.0,2.0,DOUBLE DOWN,lose,-40
+17.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,bust,-40
+20.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,lose,-40
+16.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,win,40
+18.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,win,40
+9.0,2.0,STAND,lose,-20
+6.0,2.0,STAND,lose,-20
+16.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,STAND,lose,-20
+19.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,DOUBLE DOWN,lose,-40
+18.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,win,40
+12.0,2.0,DOUBLE DOWN,lose,-40
+8.0,2.0,STAND,win,20
+9.0,2.0,STAND,win,20
+16.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+7.0,2.0,STAND,win,20
+20.0,2.0,SURRENDER,surrendered,-10
+12.0,2.0,HIT,unsettled,0
+18.0,3.0,STAND,lose,-20
+9.0,2.0,STAND,win,20
+16.0,2.0,DOUBLE DOWN,bust,-40
+9.0,2.0,STAND,lose,-20
+18.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,HIT,unsettled,0
+20.0,3.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,win,40
+13.0,2.0,DOUBLE DOWN,win,40
+17.0,2.0,DOUBLE DOWN,bust,-40
+16.0,2.0,STAND,win,20
+5.0,2.0,STAND,lose,-20
+21.0,2.0,SURRENDER,surrendered,-10
+11.0,2.0,HIT,unsettled,0
+19.0,3.0,SURRENDER,surrendered,-10
+8.0,2.0,STAND,win,20
+5.0,2.0,STAND,win,20
+13.0,2.0,DOUBLE DOWN,win,40
+17.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,lose,-40
+14.0,2.0,DOUBLE DOWN,lose,-40
+12.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,DOUBLE DOWN,lose,-40
+14.0,2.0,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,bust,-40
+6.0,2.0,STAND,lose,-20
+14.0,2.0,DOUBLE DOWN,lose,-40
+15.0,2.0,DOUBLE DOWN,win,40
+16.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,bust,-40
+15.0,2.0,DOUBLE DOWN,lose,-40
+16.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+10.0,2.0,DOUBLE DOWN,win,40
+17.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,win,40
+20.0,2.0,SURRENDER,surrendered,-10
+8.0,2.0,STAND,lose,-20
+19.0,2.0,SURRENDER,surrendered,-10
+13.0,2.0,DOUBLE DOWN,bust,-40
+13.0,2.0,DOUBLE DOWN,bust,-40
+14.0,2.0,DOUBLE DOWN,bust,-40
+18.0,2.0,SURRENDER,surrendered,-10
+18.0,2.0,SURRENDER,surrendered,-10
+9.0,2.0,STAND,lose,-20
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,lose,-40
+14.0,2.0,DOUBLE DOWN,lose,-40
+20.0,2.0,SURRENDER,surrendered,-10
+14.0,2.0,DOUBLE DOWN,draw,0
+21.0,2.0,SURRENDER,surrendered,-10
+17.0,2.0,DOUBLE DOWN,bust,-40
+6.0,2.0,STAND,lose,-20
+19.0,2.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,bust,-40
+17.0,2.0,HIT,unsettled,0
+18.0,3.0,HIT,unsettled,0
+17.0,4.0,SURRENDER,surrendered,-10
+15.0,2.0,DOUBLE DOWN,lose,-40
+8.0,2.0,STAND,lose,-20
+17.0,2.0,DOUBLE DOWN,bust,-40
+21.0,2.0,SURRENDER,surrendered,-10
+21.0,2.0,SURRENDER,surrendered,-10
+20.0,2.0,SURRENDER,surrendered,-10
+19.0,2.0,SURRENDER,surrendered,-10
+16.0,2.0,DOUBLE DOWN,bust,-40
