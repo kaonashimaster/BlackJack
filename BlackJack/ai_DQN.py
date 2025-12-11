@@ -420,7 +420,9 @@ def main():
     # Q_networkの重みをロード
     if args.load != '':
         q_net.load_state_dict(torch.load(args.load))
-
+    #テストモードなら推論に切り替え
+    if args.testmode:
+        q_net.eval()
     # ログファイルを開く
     logfile = open(args.history, 'w')
     print('score,hand_length,action,result,reward', file=logfile) # ログファイルにヘッダ行（項目名の行）を出力
