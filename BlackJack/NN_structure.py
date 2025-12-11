@@ -5,7 +5,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-# ★★★ 修正: mylibはルートにあるので「ドットなし」 ★★★
 from mylib.basic_layers import *
 
 

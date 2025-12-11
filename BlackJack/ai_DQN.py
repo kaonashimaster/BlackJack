@@ -1,4 +1,5 @@
 import torch
+import matplotlib.pyplot as plt 
 import copy
 import socket
 import argparse
@@ -92,13 +93,10 @@ def hit():
 
     # ディーラーにメッセージを送信
     player.send_message(soc, 'hit')
-    #カウンティングの更新
+    # ディーラーから情報を受信（1回だけ受信する）
     pc, score, status, rate, dc = player.receive_message(dsoc=soc, get_player_card=True, get_dealer_cards=True)
-    
+    # カウンティングの更新
     update_card_counter(get_card_info(pc))
-       
-    # ディーラーから情報を受信
-    pc, score, status, rate, dc = player.receive_message(dsoc=soc, get_player_card=True, get_dealer_cards=True)
     print('  player-card {0}: '.format(player.get_num_player_cards()), get_card_info(pc))
     print('  current score: ', score)
 
@@ -251,23 +249,14 @@ def retry():
 # 行動の実行
 def act(action: Action):
     if action == Action.HIT:
-        pc, score, status, rate, dc = player.receive_message(dsoc=soc, get_player_card=True, get_dealer_cards=True)
-        update_card_counter(get_card_info(pc))
         return hit()
     elif action == Action.STAND:
-        pc, score, status, rate, dc = player.receive_message(dsoc=soc, get_player_card=True, get_dealer_cards=True)
         return stand()
     elif action == Action.DOUBLE_DOWN:
-        pc, score, status, rate, dc = player.receive_message(dsoc=soc, get_player_card=True, get_dealer_cards=True, retry_mode=True)
-        update_card_counter(get_card_info(pc))
         return double_down()
     elif action == Action.SURRENDER:
-        pc, score, status, rate, dc = player.receive_message(dsoc=soc, get_player_card=True, get_dealer_cards=True, retry_mode=True)
-        update_card_counter(get_card_info(pc))
         return surrender()
     elif action == Action.RETRY:
-        pc, score, status, rate, dc = player.receive_message(dsoc=soc, get_player_card=True, get_dealer_cards=True, retry_mode=True)
-        update_card_counter(get_card_info(pc))
         return retry()
     else:
         exit()
@@ -412,8 +401,10 @@ def main():
     args = parser.parse_args()
 
     n_games = args.games + 1
+    #所持金額の履歴
+    money_history = [player.get_money()]
 
-    # # Qテーブルをロード
+    # Qテーブルのロード
     # if args.load != '':
     #     q_table.load(args.load)
     
@@ -475,16 +466,30 @@ def main():
                 q_table.set_Q_value(prev_state, action, Q) # 新しいQ値を登録
 
             # ログファイルに「行動前の状態」「行動の種類」「行動結果」「獲得金額」などの情報を記録
-            print('{},{},{},{},{}'.format(prev_state[0], prev_state[1], action_name, status, reward), file=logfile)
-
+            # 修正: テンソルの中から値を取り出す記述( [0][0].item() )に変更
+            print('{},{},{},{},{}'.format(prev_state[0][0].item(), prev_state[0][1].item(), action_name, status, reward), file=logfile)
+            
             # 終了フラグが立った場合はnゲーム目を終了
             if done == True:
+                #ゲーム終了時の所持金額を履歴に追加
+                money_history.append(player.get_money())
                 break
 
         print('')
 
     # ログファイルを閉じる
     logfile.close()
+
+    # 【追加】所持金の推移をグラフで表示
+    plt.figure(figsize=(10, 6))
+    plt.plot(money_history, label='Money History')
+    plt.axhline(y=INITIAL_MONEY, color='r', linestyle='--', label='Initial Money') # 初期所持金のライン
+    plt.title(f'Money Trend over {args.games} Games')
+    plt.xlabel('Games')
+    plt.ylabel('Money ($)')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
     # Qテーブルをセーブ
     if args.save != '':
