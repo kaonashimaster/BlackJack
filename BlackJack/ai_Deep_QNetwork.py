@@ -26,10 +26,10 @@ except ImportError:
     HAS_MATPLOTLIB = False
 
 # --- プロジェクト共通のコンポーネント ---
-from .classes import Action, Player, get_card_info, get_action_name
-from .config import PORT, BET, INITIAL_MONEY, N_DECKS, SHUFFLE_INTERVAL, SHUFFLE_THRESHOLD
+from classes import Action, Player, get_card_info, get_action_name
+from config import PORT, BET, INITIAL_MONEY, N_DECKS, SHUFFLE_INTERVAL, SHUFFLE_THRESHOLD
 from mylib.utility import print_args
-from .NN_structure import BJNet
+from NN_structure import BJNet
 
 # --- DQNのハイパーパラメータ（長期学習・高精度用） ---
 REPLAY_BUFFER_SIZE = 100000 # 記憶できる経験を増やす
@@ -282,7 +282,7 @@ def main():
     parser = argparse.ArgumentParser(description='DQN AI Player for Blackjack')
     parser.add_argument('--gpu', '-g', default=-1, type=int, help='GPU/CUDA ID')
     parser.add_argument('--games', type=int, default=1000, help='num. of games to play')
-    parser.add_argument('--model', '-m', default=os.path.join(MODEL_DIR, 'dqn_model.pth'), type=str, help='file path of trained model')
+    parser.add_argument('--model', '-m', default=os.path.join(MODEL_DIR, 'cautious_model.pth'), type=str, help='file path of trained model')
     parser.add_argument('--testmode', help='run without learning', action='store_true')
     args_dict = print_args(parser.parse_args()) 
     args = argparse.Namespace(**args_dict) 
