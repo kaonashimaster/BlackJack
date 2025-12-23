@@ -447,7 +447,7 @@ def main():
     # ログファイルを閉じる
     logfile.close()
 
-    # 【ここも復活しました！】所持金の推移をグラフで表示
+    # 所持金の推移をグラフで表示
     plt.figure(figsize=(10, 6))
     plt.plot(money_history, label='Money History')
     plt.axhline(y=INITIAL_MONEY, color='r', linestyle='--', label='Initial Money') # 初期所持金のライン
@@ -465,10 +465,10 @@ def main():
     print(f"Win Rate: {(total_wins / args.games) * 100:.2f}%")
     print("="*30 + "\n")
 
-    # Qテーブルをセーブ
+    # モデルの重みをセーブ
     if args.save != '':
-        # q_table.save(args.save)
-        pass
+        torch.save(q_net.state_dict(), args.save)
+        print(f"Model saved to {args.save}")
 
 if __name__ == '__main__':
     main()
