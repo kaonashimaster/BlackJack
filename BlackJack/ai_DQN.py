@@ -346,11 +346,11 @@ def select_action(state, strategy: Strategy):
     action_index = torch.argmax(qvalues).item()
 
     action_mapping = {
-        0: Action.HIT,
-        1: Action.STAND,
-        2: Action.DOUBLE_DOWN,
-        3: Action.SURRENDER,
-        4: Action.RETRY
+        0: Action.DOUBLE_DOWN,
+        1: Action.HIT,
+        2: Action.RETRY,
+        3: Action.STAND,
+        4: Action.SURRENDER
     }
 
     return action_mapping[action_index]
@@ -381,6 +381,9 @@ def main():
     # 【ここが復活しました！】テストモードなら推論に切り替え（エラー回避）
     if args.testmode:
         q_net.eval()
+        
+    # ★追加: 勝利数カウンター
+    total_wins = 0
 
     # ログファイルを開く
     logfile = open(args.history, 'w')
@@ -432,6 +435,11 @@ def main():
             if done == True:
                 # 終了時の所持金を記録
                 money_history.append(player.get_money())
+                
+                # ★追加: 勝ち数をカウント (win または dealer_bust)
+                if status == 'win' or status == 'dealer_bust':
+                    total_wins += 1
+                
                 break
 
         print('')
@@ -449,6 +457,13 @@ def main():
     plt.legend()
     plt.grid(True)
     plt.show()
+
+    # ★追加: 最終勝率の表示
+    print("\n" + "="*30)
+    print(f"Total Games: {args.games}")
+    print(f"Total Wins: {total_wins}")
+    print(f"Win Rate: {(total_wins / args.games) * 100:.2f}%")
+    print("="*30 + "\n")
 
     # Qテーブルをセーブ
     if args.save != '':

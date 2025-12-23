@@ -26,10 +26,11 @@ except ImportError:
     HAS_MATPLOTLIB = False
 
 # --- プロジェクト共通のコンポーネント ---
-from .classes import Action, Player, get_card_info, get_action_name
-from .config import PORT, BET, INITIAL_MONEY, N_DECKS, SHUFFLE_INTERVAL, SHUFFLE_THRESHOLD
+# 【修正】ドット(.)を削除し、同じフォルダのファイルを直接読み込むようにしました
+from classes import Action, Player, get_card_info, get_action_name
+from config import PORT, BET, INITIAL_MONEY, N_DECKS, SHUFFLE_INTERVAL, SHUFFLE_THRESHOLD
+from NN_structure import BJNet
 from mylib.utility import print_args
-from .NN_structure import BJNet
 
 # --- DQNのハイパーパラメータ（長期学習・高精度用） ---
 REPLAY_BUFFER_SIZE = 100000 # 記憶できる経験を増やす
@@ -517,7 +518,9 @@ def main():
         plt.savefig(graph_path)
         print(f"Graph saved to {graph_path}")
         
-        plt.show()
+        # 【修正】バックグラウンド実行時にウィンドウを表示しないようにtry-exceptで囲む
+        if os.environ.get('MPLBACKEND') != 'Agg':
+            plt.show()
 
 if __name__ == '__main__':
     main()
