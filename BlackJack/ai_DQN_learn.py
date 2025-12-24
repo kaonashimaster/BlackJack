@@ -269,11 +269,16 @@ def select_action(state, testmode=False):
     if not testmode and random.random() < EPS:
         return np.random.choice(ACTION_LIST)
     
+    q_net.eval() # 評価モードに切り替え
+
     # 活用 (Argmax Q)
     with torch.no_grad():
         state_tensor = torch.from_numpy(state).unsqueeze(0).to(device)
         q_values = q_net(state_tensor)
         action_idx = torch.argmax(q_values).item()
+    
+    if not testmode:
+        q_net.train() # 学習モードに戻す
     
     return idx_to_action(action_idx)
 
@@ -342,10 +347,10 @@ def main():
         state = get_state()
         
         # 線形減衰のコード
-        # n が 20000 に達したら、それ以降はずっと EPS_END にする
-        if n < 20000:
+        # n が EPS_DECAY に達したら、それ以降はずっと EPS_END にする
+        if n < EPS_DECAY:
             # 割合を計算 (0.0 -> 1.0)
-            ratio = n / 20000
+            ratio = n / EPS_DECAY
             # スタートから徐々に減らす
             EPS = EPS_START - (EPS_START - EPS_END) * ratio
         else:
