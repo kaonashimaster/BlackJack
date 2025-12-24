@@ -366,22 +366,39 @@ def main():
             
             # 行動実行
             reward, done, status = act(action)
-            if action == Action.RETRY: g_retry_counter += 1
+
+            # === 【ここを修正】報酬の設計（Reward Shaping） ===
+            
+            # 1. まずは金額ベースで正規化（基本: 勝ち=+1.0, 負け=-1.0）
+            normalized_reward = reward / player.basic_bet
+            
+            # 2. 特別なケースの調整
+            if action == Action.RETRY:
+                # RETRYは金額的には -0.25 だが、教育的には「負け(-1.0)」と同じくらい厳しくする
+                normalized_reward = -1.0 
+            
+            elif status == 'bust':
+                # バーストも負けなので -1.0 だが、もし「無謀なヒット」を咎めたいなら
+                # 少し重くして -1.2 とかにしても面白い（やりすぎ注意）
+                normalized_reward = -1.0
+            
+            elif action == Action.SURRENDER:
+                # サレンダーは -0.5 のままでOK（負けるよりはマシと教える）
+                normalized_reward = -0.5
+
+            # ==================================================
+
+            if action == Action.RETRY:
+                g_retry_counter += 1
 
             next_state = get_state()
 
             # バッファに追加 & 学習
             if not args.testmode:
                 action_idx = action_to_idx(action)
-
-                # === 【修正】報酬の正規化 ===
-                # 金額をベット額で割って、およそ -1.0 〜 +1.5 の範囲に収める
-                # (player.basic_bet は config.py の BET と同じ値です)
-                normalized_reward = reward / player.basic_bet
                 
-                # bufferには reward ではなく normalized_reward を入れる
+                # bufferには、調整済みの normalized_reward を入れる
                 replay_buffer.push(state, action_idx, normalized_reward, next_state, done)
-                
                 loss = train_step()
                 if loss is not None: loss_history.append(loss)
 
