@@ -373,7 +373,15 @@ def main():
             # バッファに追加 & 学習
             if not args.testmode:
                 action_idx = action_to_idx(action)
-                replay_buffer.push(state, action_idx, reward, next_state, done)
+
+                # === 【修正】報酬の正規化 ===
+                # 金額をベット額で割って、およそ -1.0 〜 +1.5 の範囲に収める
+                # (player.basic_bet は config.py の BET と同じ値です)
+                normalized_reward = reward / player.basic_bet
+                
+                # bufferには reward ではなく normalized_reward を入れる
+                replay_buffer.push(state, action_idx, normalized_reward, next_state, done)
+                
                 loss = train_step()
                 if loss is not None: loss_history.append(loss)
 
