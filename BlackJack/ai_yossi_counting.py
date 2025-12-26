@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 from collections import deque
 import random
 
-# ★NN_structureからBJNetをインポート
 from NN_structure import BJNet
 from classes import Action, Strategy, QTable, Player, get_card_info, get_action_name
 from config import PORT, BET, INITIAL_MONEY, N_DECKS
@@ -17,8 +16,6 @@ from config import PORT, BET, INITIAL_MONEY, N_DECKS
 N_TOTAL_CARDS_INIT = N_DECKS * 52
 g_card_counter = np.zeros(13, dtype=int) 
 g_total_cards_seen = 0
-
-# 1ゲームあたりのRETRY回数の上限
 RETRY_MAX = 10
 
 ### グローバル変数 ###
@@ -26,31 +23,65 @@ g_retry_counter = 0
 player = Player(initial_money=INITIAL_MONEY, basic_bet=BET)
 soc = None
 
-# ai_yosssiベースの設定値
-EPS = 0.2 # 固定（ai_yosssi流）
-LEARNING_RATE = 0.001 # 少し強気
-DISCOUNT_FACTOR = 0.5 # 短期重視（ai_yosssi流）
+# 設定値
+EPS = 0.2 
+LEARNING_RATE = 0.001 
+DISCOUNT_FACTOR = 0.9 
 BATCH_SIZE = 32
-BUFFER_SIZE = 20000
+BUFFER_SIZE = 50000 
 
 # モデルの初期化
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# === ★修正版: BJNetの「毒」を安全に抜く関数 ===
+def sanitize_model(model):
+    """
+    BJNetに含まれるDropoutを切り、BatchNormを「何もしない層」に固定する
+    """
+    for m in model.modules():
+        # Dropoutを無効化 (確率0%)
+        if isinstance(m, nn.Dropout):
+            m.p = 0.0
+        
+        # BatchNormの無効化処理
+        if isinstance(m, nn.BatchNorm1d):
+            # ここで track_running_stats=False にするとバッチサイズ1で死ぬのでやらない。
+            # 代わりに、パラメータを初期化して学習をロックする。
+            m.eval() # この層だけは常にevalモード
+            
+            # 平均0, 分散1 に固定（入力そのまま出力）
+            if m.running_mean is not None:
+                m.running_mean.zero_()
+            if m.running_var is not None:
+                m.running_var.fill_(1.0)
+            
+            # スケール(gamma)とシフト(beta)も固定
+            if m.weight is not None:
+                m.weight.data.fill_(1.0)
+                m.weight.requires_grad = False # 固定！
+            if m.bias is not None:
+                m.bias.data.zero_()
+                m.bias.requires_grad = False # 固定！
+
 try:
-    # ★BJNetを使用（中身はいじらない）
     q_net = BJNet().to(device)
-    optimizer = torch.optim.Adam(q_net.parameters(), lr=LEARNING_RATE)
+    
+    # 手術実行
+    sanitize_model(q_net) 
+    
+    # モデル全体を常にevalモードにする
+    # (DQNではBatchNormの学習は不要かつ有害なため)
+    q_net.eval()
+    
+    # オプティマイザには、requires_grad=True のパラメータ（全結合層）だけが渡される
+    optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, q_net.parameters()), lr=LEARNING_RATE)
+
 except Exception as e:
     print(f"Model Init Error: {e}")
     q_net = None
 
 # 行動リスト
-ACTION_LIST = [
-    Action.HIT,
-    Action.STAND,
-    Action.DOUBLE_DOWN,
-    Action.SURRENDER,
-    Action.RETRY
-]
+ACTION_LIST = [Action.HIT, Action.STAND, Action.DOUBLE_DOWN, Action.SURRENDER, Action.RETRY]
 
 def action_to_idx(action):
     try:
@@ -61,8 +92,26 @@ def action_to_idx(action):
 def idx_to_action(idx):
     return ACTION_LIST[idx]
 
+# === Replay Buffer ===
+class ReplayBuffer:
+    def __init__(self, capacity):
+        self.buffer = deque(maxlen=capacity)
+    def push(self, state, action, reward, next_state, done):
+        self.buffer.append((state, action, reward, next_state, done))
+    def sample(self, batch_size):
+        batch = random.sample(self.buffer, batch_size)
+        states, actions, rewards, next_states, dones = zip(*batch)
+        return (
+            torch.tensor(np.array(states), dtype=torch.float32).to(device),
+            torch.tensor(actions, dtype=torch.long).to(device),
+            torch.tensor(rewards, dtype=torch.float32).to(device),
+            torch.tensor(np.array(next_states), dtype=torch.float32).to(device),
+            torch.tensor(dones, dtype=torch.float32).to(device)
+        )
+    def __len__(self):
+        return len(self.buffer)
 
-### カードカウンティング関数 (ai_DQNから移植) ###
+# カウンティング関数
 def initialize_card_counter():
     global g_card_counter, g_total_cards_seen
     initial_count = 4 * N_DECKS
@@ -86,37 +135,28 @@ def update_card_counter(card_info):
             else: rank_idx = int(card_rank_str) - 1 
         except: return
     else: return
-
     if 0 <= rank_idx < 13 and g_card_counter[rank_idx] > 0:
         g_card_counter[rank_idx] -= 1
         g_total_cards_seen += 1
 
-
-### ゲーム進行関数 (カウント更新を追加) ###
+# ゲーム進行関数
 def game_start(game_ID=0):
     global g_retry_counter, player, soc
-
     print('Game {0} start.'.format(game_ID))
     g_retry_counter = 0
-
     soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     soc.connect((socket.gethostname(), PORT))
     soc.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
     bet, money = player.set_bet()
     print(f'Action: BET (money: {money}, bet: {bet})')
-
     cardset_shuffled = player.receive_card_shuffle_status(soc)
     if cardset_shuffled:
         print('Dealer said: Card set has been shuffled.')
         initialize_card_counter()
-
     dc, pc1, pc2 = player.receive_init_cards(soc)
-    # ★初期カードをカウント
     update_card_counter(dc)
     update_card_counter(pc1)
     update_card_counter(pc2)
-
     print('Delaer gave cards.')
     print('  dealer-card: ', get_card_info(dc))
     print('  player-card 1: ', get_card_info(pc1))
@@ -189,14 +229,12 @@ def act(action: Action):
     elif action == Action.RETRY: return retry()
     else: exit()
 
-# === 状態取得 (BJNetに合わせて17次元にする) ===
+# 状態取得
 def get_state():
     p_hand, d_hand = get_current_hands()
-    
     score = p_hand.get_score() / 30.0 
     length = p_hand.length() / 10.0  
     d_score = d_hand.get_score() / 30.0
-
     has_ace = False
     raw_score = 0
     for card_id in p_hand.cards:
@@ -204,47 +242,36 @@ def get_state():
         if rank == 1: has_ace = True
         raw_score += min(10, rank)
     soft_hand_val = 1.0 if (has_ace and raw_score + 10 <= 21) else 0.0
-
     remaining_cards = max(1, N_TOTAL_CARDS_INIT - g_total_cards_seen)
     normalized_counter = g_card_counter.astype(np.float32) / remaining_cards
-
-    # 合計17個の入力データ
     state_vector = np.concatenate([
         np.array([score, length, soft_hand_val, d_score]), 
         normalized_counter
     ]).astype(np.float32)
-    
     return state_vector
 
-# === 行動選択 (BJNetのエラー回避機能付き) ===
+# 行動選択
 def select_action(state, testmode=False):
     global q_net, EPS
-    
     if not testmode and random.random() < EPS:
         return np.random.choice(ACTION_LIST)
     
-    # ★重要: BJNet(Batch Norm)のためにevalモードへ切り替え
-    q_net.eval()
+    # 常にevalモードで実行（BatchNorm固定）
     with torch.no_grad():
         state_tensor = torch.from_numpy(state).unsqueeze(0).to(device)
         q_values = q_net(state_tensor)
         action_idx = torch.argmax(q_values).item()
     
-    # 学習モードに戻す
-    if not testmode:
-        q_net.train()
-    
     return idx_to_action(action_idx)
 
-# === 学習ステップ (ai_yossi流のシンプルなDQN) ===
+# 学習ステップ
 def train_step(batch):
     states, actions, rewards, next_states, dones = batch
-
-    # Q(s, a)
+    
+    # evalモードのまま勾配計算（Dropout/BNなし、重み更新のみ）
     q_values = q_net(states)
     q_values = q_values.gather(1, actions.unsqueeze(1)).squeeze(1)
 
-    # Q_target = r + γ max Q(s')  (ターゲットネットなし)
     with torch.no_grad():
         next_q_values = q_net(next_states).max(1)[0]
         target = rewards + DISCOUNT_FACTOR * next_q_values * (1 - dones)
@@ -257,30 +284,6 @@ def train_step(batch):
 
     return loss.item()
 
-# === Replay Buffer ===
-class ReplayBuffer:
-    def __init__(self, capacity):
-        self.buffer = deque(maxlen=capacity)
-
-    def push(self, state, action, reward, next_state, done):
-        self.buffer.append((state, action, reward, next_state, done))
-
-    def sample(self, batch_size):
-        batch = random.sample(self.buffer, batch_size)
-        states, actions, rewards, next_states, dones = zip(*batch)
-        return (
-            torch.tensor(np.array(states), dtype=torch.float32).to(device),
-            torch.tensor(actions, dtype=torch.long).to(device),
-            torch.tensor(rewards, dtype=torch.float32).to(device),
-            torch.tensor(np.array(next_states), dtype=torch.float32).to(device),
-            torch.tensor(dones, dtype=torch.float32).to(device)
-        )
-    
-    def __len__(self):
-        return len(self.buffer)
-
-
-### メイン処理 ###
 def main():
     global g_retry_counter, EPS
 
@@ -295,16 +298,12 @@ def main():
     parser.add_argument('--save', type=str, default='')
     parser.add_argument('--testmode', action='store_true')
     args = parser.parse_args()
-
     n_games = args.games + 1
     
-    if args.testmode:
-        q_net.eval()
-        EPS = 0.0
+    if args.testmode: EPS = 0.0
 
     logfile = open(args.history, 'w')
     print('score,hand_length,action,result,reward', file=logfile)
-
     initialize_card_counter()
 
     for n in range(1, n_games):
@@ -313,27 +312,21 @@ def main():
 
         while True:
             action = select_action(state, args.testmode)
-            
-            # RETRY制限の処理
             if g_retry_counter >= RETRY_MAX and action == Action.RETRY:
                 action = np.random.choice([Action.HIT, Action.STAND, Action.DOUBLE_DOWN, Action.SURRENDER])
 
             reward, done, status = act(action)
             
-            # === ★重要: BJNetのために報酬を小さく正規化 ===
+            # 報酬正規化
             normalized_reward = reward / player.basic_bet
             if action == Action.RETRY: normalized_reward = -1.0
             elif status == 'bust': normalized_reward = -1.0
             elif action == Action.SURRENDER: normalized_reward = -0.5
-            # ============================================
 
             if action == Action.RETRY: g_retry_counter += 1
             next_state = get_state()
-
-            # バッファに追加
             buffer.push(state, action_to_idx(action), normalized_reward, next_state, done)
 
-            # 学習 (ai_yossiと同じタイミング)
             if not args.testmode and len(buffer) > BATCH_SIZE:
                 batch = buffer.sample(BATCH_SIZE)
                 loss = train_step(batch)
@@ -351,7 +344,6 @@ def main():
 
     logfile.close()
     
-    # グラフ表示
     plt.figure(figsize=(12, 5))
     plt.subplot(1, 2, 1)
     plt.plot(money_history)
